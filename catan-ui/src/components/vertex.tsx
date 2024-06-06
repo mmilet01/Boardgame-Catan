@@ -1,31 +1,33 @@
-import { Graphics, Sprite, Container, Text } from "@pixi/react";
-import * as PIXI from "pixi.js";
-import { useEffect, useRef, useState } from "react";
+import React, { useState } from 'react';
+import { Text } from 'react-konva';
 
 interface IVertex {
-	index: number;
-	x: number;
-	y: number;
-	port: boolean;
+  index: number;
+  x: number;
+  screenX: number;
+  y: number;
+  screenY: number;
+  port: boolean;
 }
 
-export const Vertex = ({ x, y, index, port }: IVertex) => {
-	const textRef = useRef<PIXI.Text>(null);
-	const [text, setText] = useState("O");
+const Vertex: React.FC<IVertex> = ({ x, y, screenX, screenY }) => {
+  const [text, setText] = useState<string>("O");
 
-	useEffect(() => {
-		if (textRef.current) {
-			const text = textRef.current;
+  const handleClick = () => {
+    console.log(`new VertexId(${x}, ${y})`);
+    setText("X");
+  };
 
-			text.interactive = true;
-
-			// Add click event to text
-			text.on("click", (e) => {
-				//i cna find out the id here when clicked
-				console.log(`new VertexId(${x}, ${y}),`);
-				setText("X");
-			});
-		}
-	}, []);
-	return <Text ref={textRef} x={x} y={y} text={text} anchor={0.5} />;
+  return (
+    <Text
+      x={screenX}
+      y={screenY}
+      text={text}
+      fontSize={30}
+      fill="blue"
+      onClick={handleClick}
+    />
+  );
 };
+
+export default Vertex;
